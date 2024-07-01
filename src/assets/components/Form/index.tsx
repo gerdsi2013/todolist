@@ -24,7 +24,7 @@ export const Form = () => {
   };
 
   const handleAddTask = () => {
-    if (newTask.trim() === "") return;
+    // if (newTask.trim() === "") return;
 
     const newTodo: TaskProps = {
       id: Date.now(),
