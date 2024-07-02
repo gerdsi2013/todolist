@@ -12,6 +12,7 @@ import { CustomForm } from "./styles";
 import { AddTaskButton, ClearAllTasksButton, RevomeTaskButton } from "./components";
 
 
+
 export interface TaskProps {
   id: number;
   text: string;
