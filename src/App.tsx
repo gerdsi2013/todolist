@@ -8,10 +8,10 @@ function App() {
       <Heading
         as="h1"
         size="3xl"
-        color="blue"
+        color="green"
         fontWeight="bold"
       >
-        Todo list
+        Todo List
       </Heading>
       <Form />
     </Container>

@@ -1,22 +1,31 @@
 import {
-  Button,
   HStack,
   Input,
 } from "@chakra-ui/react";
 import { TaskLIst } from "../TaskList";
 import {
-  CheckIcon,
+  AddIcon,
   DeleteIcon,
 } from "@chakra-ui/icons";
 import { useState } from "react";
-import { TaskProps } from "../../../interface";
 import { CustomForm } from "./styles";
+import { AddTaskButton, ClearAllTasksButton, RevomeTaskButton } from "./components";
 
+
+export interface TaskProps {
+  id: number;
+  text: string;
+  
+}
+ 
 export const Form = () => {
   const [tasks, setTasks] = useState<TaskProps[]>(
     []
   );
   const [newTask, setNewTask] = useState("");
+  const [countPeddingTask, setCountPeddingTask] = useState<number>(0);
+  const [isLoadingClearAll, setIsLoadingClearAll] = useState(false)
+
   const handleOnChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -24,95 +33,89 @@ export const Form = () => {
   };
 
   const handleAddTask = () => {
-    // if (newTask.trim() === "") return;
-
+    if(newTask.trim() === '') return;
+    setIsLoadingClearAll(true)
+    
     const newTodo: TaskProps = {
       id: Date.now(),
       text: newTask,
-      completed: false,
+      
     };
     setTasks([...tasks, newTodo]);
+    setCountPeddingTask(tasks.length+1)
     setNewTask("");
   };
+ const handleOnSubmit = (e: React.FormEvent<HTMLDivElement>) => {
+   e.preventDefault();
+   handleAddTask();
 
+ }
   const handleRemoveTask = (id: number) => {
     setTasks(
       tasks.filter((task) => task.id !== id)
     );
+    
+    if(tasks.length <= 1){
+     return setIsLoadingClearAll(false)
+    }
+    
+
   };
 
-  const handleToggleDone = (id: number) => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === id
-          ? {
-              ...task,
-              completed: !task.completed,
-            }
-          : task
-      )
-    );
-  };
   return (
     <CustomForm
-      onSubmit={(e) => {
-        e.preventDefault();
-        handleAddTask;
-      }}
+      onSubmit={handleOnSubmit}
     >
       <HStack>
         <Input
           type="text"
-          placeholder="add new task..."
+          placeholder="Add new task..."
+          color={'blue'}
           value={newTask}
           onChange={handleOnChange}
         />
+       
+       <AddTaskButton onClick={
+        ()=>{
+          handleAddTask();
+        }
+       } >
+       <AddIcon/>
+       </AddTaskButton>
 
-        <Button
-          onClick={() => {
-            handleAddTask();
-          }}
-          colorScheme="blue"
-          color="white"
-          type="submit"
-        >
-          add
-        </Button>
       </HStack>
-
       {tasks.map((task) => {
         return (
           <TaskLIst
             key={task.id}
             text={task.text}
-            textDecoration={
-              task.completed
-                ? "line-through"
-                : "none"
-            }
-            textDecorationColor={
-              task.completed ? "blue" : "inherit"
-            }
           >
-            <Button
-              colorScheme="green"
-              onClick={() =>
-                handleToggleDone(task.id)
-              }
-            >
-              <CheckIcon />
-            </Button>
-            <Button
-              colorScheme="red"
-              onClick={() => {
-                handleRemoveTask(task.id);
-              }}
+            
+            <RevomeTaskButton 
+            onClick={()=>{
+              handleRemoveTask(task.id);
+              setCountPeddingTask(tasks.length-1); 
+            }}
             >
               <DeleteIcon />
-            </Button>
+            </RevomeTaskButton>
           </TaskLIst>
         );
       })}
+   
+      {isLoadingClearAll && (
+        <ClearAllTasksButton text={`You have ${countPeddingTask} pedding tasks`} onclick={()=>{
+          setTasks([]);
+          setCountPeddingTask(0)
+          setIsLoadingClearAll(!isLoadingClearAll)
+        }} >
+          Clear All
+        </ClearAllTasksButton>
+         
+      )}
+
+
     </CustomForm>
+
   );
-};
+}

@@ -1,22 +1,23 @@
 import { ReactNode } from "react";
 import {
+  Box,
   Flex,
   HStack,
   Text,
+  flexbox,
 } from "@chakra-ui/react";
 
 interface Props {
   text: string;
   children: ReactNode;
-  textDecoration: string;
-  textDecorationColor: string;
+  
 }
 
 export const TaskLIst = ({
   text,
   children,
-  textDecoration,
-  textDecorationColor,
+  
+  
 }: Props) => {
   return (
     <Flex
@@ -25,18 +26,17 @@ export const TaskLIst = ({
       borderRadius="md"
       width="100%"
       alignItems="center"
-      justifyContent="space-between"
+      justifyContent="space-between"  
     >
-      <Text
+     
+     <Text
         pl="1rem"
         size="1rem"
-        color="black"
-        textDecoration={textDecoration}
-        textDecorationColor={textDecorationColor}
+        color="blue"
       >
         {text}
       </Text>
-      <HStack>{children}</HStack>
+      <HStack>{children}</HStack>  
     </Flex>
   );
 };
