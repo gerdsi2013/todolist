@@ -6,9 +6,8 @@ function App() {
   return (
     <Container>
       <Heading
-        as="h1"
         size="3xl"
-        color="green"
+        color="primary.800"
         fontWeight="bold"
       >
         Todo List

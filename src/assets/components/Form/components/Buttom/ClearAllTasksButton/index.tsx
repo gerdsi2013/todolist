@@ -1,7 +1,7 @@
-import { Button, Flex ,Text
-
- } from "@chakra-ui/react";
+import { Button} from "@chakra-ui/react";
 import { ReactNode } from "react";
+import { ClearAllTasksFlex, ClearAllTasksText } from "./ClearAlltasksButton.Styles";
+
 
 
 interface PropsClearTask{
@@ -10,19 +10,17 @@ interface PropsClearTask{
    onclick: () => void
 }
 
-
-
 export const ClearAllTasksButton = ({ text, children, onclick}: PropsClearTask)=>{
     return(
-        <Flex justifyContent={'space-between'} mt={'1rem'} pl={'1rem'} alignItems={'center'} >
-        <Text color={'red'}>{text}</Text>
+        <ClearAllTasksFlex>
+        <ClearAllTasksText>{text}</ClearAllTasksText>
         <Button
-          colorScheme="red"
+          colorScheme={'purple'}
           onClick={onclick}
         >
           {children}
         </Button>
-      </Flex>
+      </ClearAllTasksFlex>
 
     )
 }

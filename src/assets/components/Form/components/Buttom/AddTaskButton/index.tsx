@@ -4,18 +4,17 @@ import { ReactNode } from "react";
 
 interface PropsAddTaskButton{
     children: ReactNode
-    onClick: () => void
+    
 }
 
 
-export const AddTaskButton =({children, onClick}: PropsAddTaskButton)=>{
+export const AddTaskButton =({children}: PropsAddTaskButton)=>{
     return(
         <Button
-          onClick={onClick}
-          colorScheme="blue"
-          color="white"
-          type="submit"
           
+          colorScheme="teal"
+          color="primary.50"
+          type="submit"
         >
           {children}
         </Button> 

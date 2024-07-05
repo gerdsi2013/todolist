@@ -2,13 +2,7 @@ import { Button, ButtonProps } from "@chakra-ui/react";
 
 
 
-interface PropsRemoveTask extends ButtonProps{
-
-}
-    
-
-
-export const RevomeTaskButton=({...props}: PropsRemoveTask)=>{
+export const RevomeTaskButton=({...props}: ButtonProps)=>{
     return(
         <Button
         {...props}

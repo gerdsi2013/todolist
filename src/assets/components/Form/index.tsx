@@ -1,101 +1,88 @@
 import {
-  HStack,
+
   Input,
 } from "@chakra-ui/react";
-import { TaskLIst } from "../TaskList";
+import { TaskLIst } from "./components/TaskList";
 import {
   AddIcon,
   DeleteIcon,
 } from "@chakra-ui/icons";
 import { useState } from "react";
-import { CustomForm } from "./styles";
-import { AddTaskButton, ClearAllTasksButton, RevomeTaskButton } from "./components";
 
+import { AddTaskButton, ClearAllTasksButton, RevomeTaskButton } from "./components";
+import { useForm } from "react-hook-form";
+import { ConntainerForm, CusttomForm } from "./styles";
+import { ContainerTaskList } from "./components/TaskList/taskList.stiyles";
 
 
 export interface TaskProps {
   id: number;
-  text: string;
-  
+  text: string; 
 }
+
+interface InputForm extends TaskProps{}
  
 export const Form = () => {
   const [tasks, setTasks] = useState<TaskProps[]>(
     []
   );
-  const [newTask, setNewTask] = useState("");
+  
   const [countPeddingTask, setCountPeddingTask] = useState<number>(0);
   const [isLoadingClearAll, setIsLoadingClearAll] = useState(false)
+  const{handleSubmit, register  } = useForm<InputForm>()
+  
 
-  const handleOnChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setNewTask(e.target.value);
-  };
-
-  const handleAddTask = () => {
-    if(newTask.trim() === '') return;
+  const handleAddTask = (data: any) => {    
     setIsLoadingClearAll(true)
     
     const newTodo: TaskProps = {
       id: Date.now(),
-      text: newTask,
-      
+      text: data.text,
     };
     setTasks([...tasks, newTodo]);
     setCountPeddingTask(tasks.length+1)
-    setNewTask("");
+  
   };
- const handleOnSubmit = (e: React.FormEvent<HTMLDivElement>) => {
-   e.preventDefault();
-   handleAddTask();
 
- }
+
   const handleRemoveTask = (id: number) => {
-    setTasks(
-      tasks.filter((task) => task.id !== id)
-    );
-    
-    if(tasks.length <= 1){
-     return setIsLoadingClearAll(false)
-    }
-    
-
+    setTasks(tasks.filter((task) => task.id!== id));
+    setCountPeddingTask(tasks.length-1)
   };
 
   return (
-    <CustomForm
-      onSubmit={handleOnSubmit}
-    >
-      <HStack>
+    <CusttomForm>
+      <ConntainerForm
+      onSubmit={handleSubmit(handleAddTask)}
+      >
         <Input
           type="text"
           placeholder="Add new task..."
-          color={'blue'}
-          value={newTask}
-          onChange={handleOnChange}
+          color="text.light"      
+          {...register('text')}
         />
        
-       <AddTaskButton onClick={
-        ()=>{
-          handleAddTask();
-        }
-       } >
+       <AddTaskButton >
        <AddIcon/>
        </AddTaskButton>
+      </ConntainerForm>
 
-      </HStack>
+       <ContainerTaskList 
+
+       as='section'>
       {tasks.map((task) => {
         return (
           <TaskLIst
             key={task.id}
             text={task.text}
           >
-            
             <RevomeTaskButton 
             onClick={()=>{
               handleRemoveTask(task.id);
-              setCountPeddingTask(tasks.length-1); 
+              setCountPeddingTask(tasks.length-1);
+              if(countPeddingTask == 1){
+                setIsLoadingClearAll(!isLoadingClearAll)
+              }
             }}
             >
               <DeleteIcon />
@@ -103,7 +90,8 @@ export const Form = () => {
           </TaskLIst>
         );
       })}
-   
+   </ContainerTaskList>
+
       {isLoadingClearAll && (
         <ClearAllTasksButton text={`You have ${countPeddingTask} pedding tasks`} onclick={()=>{
           setTasks([]);
@@ -111,12 +99,10 @@ export const Form = () => {
           setIsLoadingClearAll(!isLoadingClearAll)
         }} >
           Clear All
-        </ClearAllTasksButton>
-         
+        </ClearAllTasksButton> 
       )}
 
-
-    </CustomForm>
+    </CusttomForm>
 
   );
 }
